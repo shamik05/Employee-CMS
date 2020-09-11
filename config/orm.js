@@ -42,11 +42,6 @@ const orm = {
   updateEmployee: async answers => {
     const query = "UPDATE ?? SET ?? = ? WHERE ?? = ?";
     return await db.query(query, answers);
-  },
-  updateEmployeeManager: async (answers) => {
-    console.log(answers);
-    const query = "UPDATE employee SET manager_id = ? WHERE id = ?";
-    return await db.query(query, [answers.manager_id, answers.employee_id])
   }
 };
 
