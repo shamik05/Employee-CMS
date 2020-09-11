@@ -3,8 +3,8 @@ const inquirer = require("inquirer");
 const cTable = require("console.table");
 
 // View employees with view (ALL, BY DEPARTMENT, BY MANAGER) passed in as argument
-const viewEmp = type => {
-  orm.selectOrder(type, function(err, result) {
+const employeeView = type => {
+  orm.employeeView(type, function(err, result) {
   if (err) throw err;
   console.log("\n\n");
   console.table(result);
@@ -13,7 +13,7 @@ const viewEmp = type => {
 };
 
 // Adds employee
-const addEmp = async () => {
+const employeeAdd = async () => {
   inquirer.prompt([
     {
       name: "first_name",
@@ -33,30 +33,30 @@ const addEmp = async () => {
       type: "list",
       name: "role_id",
       message: "What is the employee's role?",
-      choices: await orm.findRoles()
+      choices: await orm.rolesFind()
     },
     {
       type: "list",
       name: "manager_id",
       message: "Who is the employee's manager?",
-      choices: await orm.findEmployees().then(result => {
+      choices: await orm.employeeFind().then(result => {
           result.unshift({value: null, name: "None"});
           return result;
           })
     }
   ]).then(answers => {
-   orm.insertEmployee(answers);
+   orm.employeeAdd(answers);
    viewEmp("All");
   });
 };
 
 // Delete employee
-const removeEmp = async () => {
+const employeeDelete = async () => {
   inquirer.prompt({
     type: "list",
     name: "employee",
     message: "Which employee do you want to terminate?",
-    choices: await orm.findEmployees().then(result => {
+    choices: await orm.employeeFind().then(result => {
         result.unshift({value: null, name: "Go Back"});
         return result;
         })
@@ -64,20 +64,20 @@ const removeEmp = async () => {
     if(answers.employee === null) {
       menu();
     } else {
-      orm.deleteEmployee(answers.employee);
+      orm.employeeDelete(answers.employee);
       viewEmp("All");
     };
   });
 };
 
 // Update employee's role
-const updateEmpRole = async () => {
+const employeeUpdateRole = async () => {
   inquirer.prompt([
   {
     type: "list",
     name: "id",
     message: "Who is the employee?",
-    choices: await orm.findEmployees().then(result => {
+    choices: await orm.employeeFind().then(result => {
         result.unshift({value: null, name: "Go Back"});
         return result;
         })
@@ -86,7 +86,7 @@ const updateEmpRole = async () => {
     type: "list",
     name: "role_id",
     message: "What is the employee's new role?",
-    choices: await orm.findRoles(), 
+    choices: await orm.rolesFind(), 
     when: answers => answers.id != null
   }
   ]).then(answers => {
@@ -94,20 +94,20 @@ const updateEmpRole = async () => {
     if(answers.id === null) {
       menu();
     } else {
-      orm.updateEmployee(["employee", "role_id",answers.role_id, "id", answers.id]);
+      orm.employeeUpdate(["employee", "role_id",answers.role_id, "id", answers.id]);
       viewEmp("All");
     };
   });
 };
 
 // Update employee's manager
-const updateEmpMan = async () => {
+const employeeUpdateManager = async () => {
   inquirer.prompt([
     {
       type: "list",
       name: "id",
       message: "Who is the employee?",
-      choices: await orm.findEmployees().then(result => {
+      choices: await orm.employeeFind().then(result => {
           result.unshift({value: null, name: "Go Back"});
           return result;
           })
@@ -116,7 +116,7 @@ const updateEmpMan = async () => {
       type: "list",
       name: "manager_id",
       message: "Who is the employee's manager?",
-      choices: await orm.findEmployees().then(result => {
+      choices: await orm.employeeFind().then(result => {
         result.unshift({value: null, name: "None"});
         return result;
         }), 
@@ -135,8 +135,56 @@ const updateEmpMan = async () => {
     });
 };
 
+// View all roles
+const rolesView = async () => {
+  orm.rolesView(function(err, result) {
+    if (err) throw err;
+    console.log("\n\n");
+    console.table(result);
+    });
+    menu();
+};
+
+const rolesAdd = async () => {
+  inquirer.prompt([
+    {
+      name: "title",
+      message: "What is the role title?",
+      validate: input=>{
+        return input !== '' || "Title cannot be empty.";
+      }
+    },
+    {
+      name: "salary",
+      message: "What is the role salary?",
+      validate: input=>{
+       if(isNaN(input)){
+            return "Id has to be a number."
+        } else if(input<0){
+          return "Id has to be a positive number."
+        } else if(input === ""){
+            return "Id cannot be empty."
+        }else{
+            return true;
+        };
+      }
+    },
+    {
+      type: "list",
+      name: "department_id",
+      message: "What is the employee's role?",
+      choices: await orm.departmentFind()
+    }
+  ]).then(answers => {
+    console.log(answers);
+   orm.rolesAdd(answers);
+   rolesView();
+  });
+};
+
 // Main menu 
 const menu = () => {
+  console.log("\n\n");
   inquirer.prompt({
     name: "menu",
     type: "list",
@@ -157,25 +205,31 @@ const menu = () => {
   }).then(answer => {
     switch (answer.menu) {
       case "View All Employees":
-        viewEmp("All");
+        employeeView("All");
         break;
       case "View All Employees by Department":
-        viewEmp("Department");
+        employeeView("Department");
         break;
       case "View All Employees by Manager":
-        viewEmp("Manager");
+        employeeView("Manager");
         break;
       case "Add Employee":
-        addEmp();
+        employeeAdd();
         break;
       case "Remove Employee":
-        removeEmp();
+        employeeDelete();
         break;
       case "Update Employee Role":
-        updateEmpRole();
+        employeeUpdateRole();
         break;
       case "Update Employee Manager":
-        updateEmpMan();
+        employeeUpdateManager();
+        break;
+      case "View All Roles":
+        rolesView();
+        break;
+      case "Add Role":
+        rolesAdd();
         break;
       case "Exit":
         console.log("Exiting");
