@@ -16,30 +16,31 @@ const role = {
     "Remove Role",
     "Update Role",
     ]
-    }).then(answers => {
-      switch (answers.menu) {
-        case "View Roles":
-          role.view();
-          break;
-        case "Add Role":
-          role.add();
-          break;
-        case "Remove Role":
-          // rolesDelete();
-          console.log(answers.menu)
-          break;
-        case "Update Role":
-          // rolesUpdate();
-          console.log(answers.menu)
-          break;
-        default:
-          index.menu();
-          break;          
-      };
+    })
+    .then(answers => {
+    switch (answers.menu) {
+    case "View Roles":
+      role.view();
+      break;
+    case "Add Role":
+      role.add();
+      break;
+    case "Remove Role":
+      // rolesDelete();
+      console.log(answers.menu)
+      break;
+    case "Update Role":
+      // rolesUpdate();
+      console.log(answers.menu)
+      break;
+    default:
+      index.menu();
+      break;          
+    };
     })
   },
   // View all roles
-  view: async (err, result) => {
+  view: async () => {
   rolesView(function(err, result) {
     if (err) throw err;
     console.log("\n\n");
@@ -78,11 +79,12 @@ const role = {
         message: "What is the employee's role?",
         choices: await departmentFind()
       }
-    ]).then(answers => {
+    ])
+    .then(answers => {
     rolesAdd(answers);
     role.view();
     });
-  }
+  },
 };
 
 module.exports = role;
