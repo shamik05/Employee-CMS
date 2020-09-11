@@ -12,12 +12,17 @@ const orm = {
     db.query(query, cb);
   },
   findRoles: async () => {
-    const query = `SELECT id,title FROM role ORDER BY title ASC`;
+    const query = `SELECT id AS value, title AS name FROM role ORDER BY title ASC`;
     return await db.query(query);
   },
-  findMEmployees: async () => {
-    const query = `SELECT id, concat(first_name, " ", last_name) AS employee FROM employee ORDER BY last_name ASC`
+  findEmployees: async () => {
+    const query = `SELECT id AS value, concat(first_name, " ", last_name) AS name FROM employee ORDER BY last_name ASC`
     return await db.query(query);
+  },
+  insertEmployee: async (values) => {
+    const query = `INSERT INTO employee(first_name, last_name, role_id, manager_id) values(?,?,?,?)`
+    console.log(values);
+    return await db.query(query,[...Object.values(values)]);
   }
 };
 

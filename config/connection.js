@@ -20,6 +20,5 @@ function makeDb() {
     }
   };
 }
-// Initiate MySQL Connection.
 
 module.exports = makeDb();

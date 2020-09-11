@@ -12,48 +12,39 @@ const viewEmp = type => {
 };
 
 const addEmp = async () => {
-  let roleList = [];
-  let employeeList = [];
-
-  await orm.findRoles()
-  .then(result => {
-    console.log(result)
-    result.forEach(element => {
-      roleList.push(element.title);
-    });
-  })
-
-  await orm.findMEmployees()
-  .then(result => {
-    console.log(result);
-    result.forEach(element => {
-      employeeList.push(element.employee);
-    });
-  });
-
   inquirer.prompt([
     {
-      name: "firstName",
-      message: "What is the employee's first name?"
+      name: "first_name",
+      message: "What is the employee's first name?",
+      validate: input=>{
+        return input !== '' || "Name cannot be empty.";
+      }
     },
     {
-      name: "lastName",
-      message: "What is the employee's last name?"
+      name: "last_name",
+      message: "What is the employee's last name?",
+      validate: input=>{
+        return input !== '' || "Name cannot be empty.";
+      }
     },
     {
       type: "list",
-      name: "role",
+      name: "role_id",
       message: "What is the employee's role?",
-      choices: roleList
+      choices: await orm.findRoles()
     },
     {
       type: "list",
-      name: "manager",
+      name: "manager_id",
       message: "Who is the employee's manager?",
-      choices: employeeList
+      choices: await orm.findEmployees().then(result => {
+          result.unshift({value: null, name: "None"});
+          return result;
+          })
     }
-  ]).then(res => {
-    console.log(res);
+  ]).then(answers => {
+   orm.insertEmployee(answers);
+   viewEmp("E.id");
   });
 };
 
@@ -89,10 +80,16 @@ const menu = () => {
       case "Add Employee":
         addEmp();
         break;
+      case "Remove Employee":
+        removeEmp();
+        break;
+      case "Exit":
+        console.log("Exiting");
+        break;
       default:
         connection.end();
+        break;
     }
-    // menu();
   });
 };
 
