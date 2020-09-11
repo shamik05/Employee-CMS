@@ -57,7 +57,7 @@ const removeEmp = async () => {
     name: "employee",
     message: "Which employee do you want to terminate?",
     choices: await orm.findEmployees().then(result => {
-        result.unshift({value: null, name: "None"});
+        result.unshift({value: null, name: "Go Back"});
         return result;
         })
   }).then(answers => {
@@ -75,10 +75,10 @@ const updateEmpRole = async () => {
   inquirer.prompt([
   {
     type: "list",
-    name: "employee_id",
+    name: "id",
     message: "Who is the employee?",
     choices: await orm.findEmployees().then(result => {
-        result.unshift({value: null, name: "None"});
+        result.unshift({value: null, name: "Go Back"});
         return result;
         })
   },
@@ -87,17 +87,50 @@ const updateEmpRole = async () => {
     name: "role_id",
     message: "What is the employee's new role?",
     choices: await orm.findRoles(), 
-    when: answers => answers.employee_id != null
+    when: answers => answers.id != null
   }
   ]).then(answers => {
     console.log(answers);
-    if(answers.employee_id === null) {
+    if(answers.id === null) {
       menu();
     } else {
-      orm.updateEmployeeRole(answers);
+      orm.updateEmployee(["employee", "role_id",answers.role_id, "id", answers.id]);
       viewEmp("All");
     };
   });
+};
+
+// Update employee's manager
+const updateEmpMan = async () => {
+  inquirer.prompt([
+    {
+      type: "list",
+      name: "employee_id",
+      message: "Who is the employee?",
+      choices: await orm.findEmployees().then(result => {
+          result.unshift({value: null, name: "Go Back"});
+          return result;
+          })
+    },
+    {
+      type: "list",
+      name: "manager_id",
+      message: "Who is the employee's manager?",
+      choices: await orm.findEmployees().then(result => {
+        result.unshift({value: null, name: "None"});
+        return result;
+        }), 
+      when: answers => answers.employee_id != null
+    }
+    ]).then(answers => {
+      console.log(answers);
+      if(answers.employee_id === null) {
+        menu();
+      } else {
+        orm.updateEmployeeRole(answers);
+        viewEmp("All");
+      };
+    });
 };
 
 // Main menu 
@@ -138,6 +171,9 @@ const menu = () => {
         break;
       case "Update Employee Role":
         updateEmpRole();
+        break;
+      case "Update Employee Manager":
+        updateEmpMan();
         break;
       case "Exit":
         console.log("Exiting");

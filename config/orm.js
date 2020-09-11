@@ -35,13 +35,18 @@ const orm = {
     const query = `INSERT INTO employee(first_name, last_name, role_id, manager_id) values(?,?,?,?)`;
     return await db.query(query,[...Object.values(values)]);
   },
-  deleteEmployee: async (id) => {
+  deleteEmployee: async id => {
     const query = "DELETE FROM employee where id = ?";
     return await db.query(query, id);
   },
-  updateEmployeeRole: async (answers) => {
-    const query = "UPDATE employee SET role_id = ? WHERE id = ?";
-    return await db.query(query, [answers.role_id, answers.employee_id]);
+  updateEmployee: async answers => {
+    const query = "UPDATE ?? SET ?? = ? WHERE ?? = ?";
+    return await db.query(query, answers);
+  },
+  updateEmployeeManager: async (answers) => {
+    console.log(answers);
+    const query = "UPDATE employee SET manager_id = ? WHERE id = ?";
+    return await db.query(query, [answers.manager_id, answers.employee_id])
   }
 };
 
