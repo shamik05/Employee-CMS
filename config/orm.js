@@ -54,6 +54,16 @@ const orm = {
     const query = `INSERT INTO role(??, ??, ??) values(?,?,?)`
     return await db.query(query, [...Object.keys(answers), ...Object.values(answers)]);
   },
+  rolesDelete: async answers => {
+    console.log(answers);
+    const query = '';
+    return await db.query();
+  },
+  rolesUpdate: async answers => {
+    console.log(answers);
+    const query = "UPDATE ?? SET ?? = ? WHERE ?? = ?";
+    // return await db.query(query, answers);
+  },
   departmentFind: async () => {
     const query = `SELECT id AS value, name FROM department ORDER BY name ASC`;
     return await db.query(query);

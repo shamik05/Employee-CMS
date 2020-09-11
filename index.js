@@ -1,6 +1,7 @@
 const orm = require("./config/orm.js");
 const inquirer = require("inquirer");
 const cTable = require("console.table");
+const role = require("./controller/roleController.js");
 
 // View employees with view (ALL, BY DEPARTMENT, BY MANAGER) passed in as argument
 const employeeView = type => {
@@ -135,16 +136,7 @@ const employeeUpdateManager = async () => {
     });
 };
 
-// View all roles
-const rolesView = async () => {
-  orm.rolesView(function(err, result) {
-    if (err) throw err;
-    console.log("\n\n");
-    console.table(result);
-    });
-    menu();
-};
-
+// Adds role
 const rolesAdd = async () => {
   inquirer.prompt([
     {
@@ -176,15 +168,87 @@ const rolesAdd = async () => {
       choices: await orm.departmentFind()
     }
   ]).then(answers => {
-    console.log(answers);
    orm.rolesAdd(answers);
    rolesView();
   });
 };
 
+// Deletes role
+const rolesDelete = async () => {
+  inquirer.prompt({
+    type: "list",
+    name: "employee",
+    message: "Which employee do you want to terminate?",
+    choices: await orm.employeeFind().then(result => {
+        result.unshift({value: null, name: "Go Back"});
+        return result;
+        })
+  }).then(answers => {
+    if(answers.employee === null) {
+      menu();
+    } else {
+      orm.employeeDelete(answers.employee);
+      viewEmp("All");
+    };
+  });
+}
+
+// Update Role's Title, Salary or Department
+const rolesUpdate = async() => {
+  const roleSubMenu = await inquirer.prompt({
+    type: "list",
+    name: "subMenu",
+    message: "Which role do you want to update?",
+    choices: [{value: null, name: "Go Back"},{value: "title", name: "Update Title"},{value: "salary", name: "Update Salary"},{value: "department", name: "Update Department"}]
+  })
+  console.log(roleChoice);
+  if(roleSubMenu.subMenu === null) {
+    menu();
+  } 
+  await inquirer.prompt({
+
+  })
+  // {
+  //   type: "list",
+  //   name: "roleChoose",
+  //   message: "Which role do you want to update?",
+  //   choices: await orm.rolesFind().then(result => {
+  //     result.unshift({value: null, name: "Go Back"});
+  //     return result;
+  //     }),
+  //   when: function(answers) {
+  //     return answers.rolesUpdateMenu;
+  //   }
+  // },
+  // {
+  //   type: "input",
+  //   name: "roleSet",
+  //   message: `What is the role's newest ${answers.rolesUpdateMenu}?`,
+  //   when: function(answers) {
+  //     return answers.roleChoose;
+  //   }
+  // }
+  // ]).then(answers => {
+  //   console.log(answers)
+  //   if (answers.rolesUpdateMenu === null){
+  //     menu();
+  //   }
+  // })
+
+  // if(answers.rolesUpdate === null){
+  //   menu();
+  // };
+  // inquirer.prompt([{
+    // type: "list",
+    // name: "choice",
+    // message: "Which role do you want to update?",
+    // choices: await orm.rolesFind()
+  // }]).then(answers => {console.log(answers)});
+  // orm.rolesUpdate(["role", ])
+};
+
 // Main menu 
 const menu = () => {
-  console.log("\n\n");
   inquirer.prompt({
     name: "menu",
     type: "list",
@@ -197,9 +261,7 @@ const menu = () => {
       "Remove Employee",
       "Update Employee Role",
       "Update Employee Manager",
-      "View All Roles",
-      "Add Role",
-      "Remove Role",
+      "Role Management",
       "Exit",
     ],
   }).then(answer => {
@@ -225,12 +287,30 @@ const menu = () => {
       case "Update Employee Manager":
         employeeUpdateManager();
         break;
-      case "View All Roles":
-        rolesView();
+      case "Role Management":
+        role.menu();
         break;
-      case "Add Role":
-        rolesAdd();
-        break;
+      // case "Add Role":
+      //   rolesAdd();
+      //   break;
+      // case "Remove Role":
+      //   rolesDelete();
+      //   break;
+      // case "Update Role":
+      //   inquirer.prompt({
+      //     type: "list",
+      //     name: "roleUpdate",
+      //     message: "Which role do you want to update?",
+      //     choices: [{value: null, name: "Go Back"},{value: "title", name: "Update Title"},{value: "salary", name: "Update Salary"},{value: "department", name: "Update Department"}]
+      //   }).then(answers => {
+      //     const {roleUpdate} = answers;
+      //     if(roleUpdate) {
+      //       rolesUpdate(roleUpdate);
+      //     }else {
+      //       menu();
+      //     }
+      //   });
+      //   break;
       case "Exit":
         console.log("Exiting");
         break;
@@ -242,3 +322,5 @@ const menu = () => {
 };
 
 menu();
+
+module.exports.menu = menu;
