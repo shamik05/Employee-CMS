@@ -2,6 +2,7 @@ const orm = require("./config/orm.js");
 const inquirer = require("inquirer");
 const cTable = require("console.table");
 
+// View employees with view (ALL, BY DEPARTMENT, BY MANAGER) passed in as argument
 const viewEmp = type => {
   orm.selectOrder(type, function(err, result) {
   if (err) throw err;
@@ -11,6 +12,7 @@ const viewEmp = type => {
   menu();
 };
 
+// Adds employee
 const addEmp = async () => {
   inquirer.prompt([
     {
@@ -44,10 +46,44 @@ const addEmp = async () => {
     }
   ]).then(answers => {
    orm.insertEmployee(answers);
-   viewEmp("E.id");
+   viewEmp("All");
   });
 };
 
+// Delete employee
+const removeEmp = async () => {
+  inquirer.prompt({
+    type: "list",
+    name: "employee",
+    message: "Which employee do you want to terminate?",
+    choices: await orm.findEmployees().then(result => {
+        result.unshift({value: null, name: "None"});
+        console.log(result);
+        return result;
+        })
+  }).then(answers => {
+    orm.deleteEmployee(answers.employee);
+    viewEmp("All");
+  });
+};
+
+// Update employee's role
+const updateEmpRole = async () => {
+  inquirer.prompt({
+    type: "list",
+    name: "manager_id",
+    message: "Who is the employee's manager?",
+    choices: await orm.findEmployees().then(result => {
+        result.unshift({value: null, name: "None"});
+        return result;
+        })
+  }).then(answers => {
+    orm.deleteEmployee(answers.manager_id);
+    viewEmp("All");
+  });
+};
+
+// Main menu 
 const menu = () => {
   inquirer.prompt({
     name: "menu",
@@ -69,13 +105,13 @@ const menu = () => {
   }).then(answer => {
     switch (answer.menu) {
       case "View All Employees":
-        viewEmp("E.id");
+        viewEmp("All");
         break;
       case "View All Employees by Department":
-        viewEmp("D.name");
+        viewEmp("Department");
         break;
       case "View All Employees by Manager":
-        viewEmp("Manager desc");
+        viewEmp("Manager");
         break;
       case "Add Employee":
         addEmp();
