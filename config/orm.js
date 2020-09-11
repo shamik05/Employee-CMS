@@ -38,6 +38,10 @@ const orm = {
   deleteEmployee: async (id) => {
     const query = "DELETE FROM employee where id = ?";
     return await db.query(query, id);
+  },
+  updateEmployeeRole: async (answers) => {
+    const query = "UPDATE employee SET role_id = ? WHERE id = ?";
+    return await db.query(query, [answers.role_id, answers.employee_id]);
   }
 };
 

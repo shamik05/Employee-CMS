@@ -58,28 +58,45 @@ const removeEmp = async () => {
     message: "Which employee do you want to terminate?",
     choices: await orm.findEmployees().then(result => {
         result.unshift({value: null, name: "None"});
-        console.log(result);
         return result;
         })
   }).then(answers => {
-    orm.deleteEmployee(answers.employee);
-    viewEmp("All");
+    if(answers.employee === null) {
+      menu();
+    } else {
+      orm.deleteEmployee(answers.employee);
+      viewEmp("All");
+    };
   });
 };
 
 // Update employee's role
 const updateEmpRole = async () => {
-  inquirer.prompt({
+  inquirer.prompt([
+  {
     type: "list",
-    name: "manager_id",
-    message: "Who is the employee's manager?",
+    name: "employee_id",
+    message: "Who is the employee?",
     choices: await orm.findEmployees().then(result => {
         result.unshift({value: null, name: "None"});
         return result;
         })
-  }).then(answers => {
-    orm.deleteEmployee(answers.manager_id);
-    viewEmp("All");
+  },
+  {
+    type: "list",
+    name: "role_id",
+    message: "What is the employee's new role?",
+    choices: await orm.findRoles(), 
+    when: answers => answers.employee_id != null
+  }
+  ]).then(answers => {
+    console.log(answers);
+    if(answers.employee_id === null) {
+      menu();
+    } else {
+      orm.updateEmployeeRole(answers);
+      viewEmp("All");
+    };
   });
 };
 
@@ -118,6 +135,9 @@ const menu = () => {
         break;
       case "Remove Employee":
         removeEmp();
+        break;
+      case "Update Employee Role":
+        updateEmpRole();
         break;
       case "Exit":
         console.log("Exiting");
