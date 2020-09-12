@@ -1,6 +1,8 @@
 const inquirer = require("inquirer");
 const index = require("../index");
-const { departmentView, departmentAdd } = require("../config/orm");
+const {
+  departmentFind, departmentView, departmentAdd, rowDelete,
+} = require("../config/orm");
 
 const department = {
   // Department Management Menu
@@ -11,6 +13,7 @@ const department = {
       message: "What would you like to do?",
       choices: [
         "View Departments",
+        "View Department Details",
         "Add Department",
         "Remove Department",
         "Go Back",
@@ -20,11 +23,14 @@ const department = {
       case "View Departments":
         department.view();
         break;
+      case "View Department Details":
+        department.view();
+        break;
       case "Add Department":
         department.add();
         break;
       case "Remove Department":
-        department.remove();
+        department.delete();
         break;
       default:
         index.menu();
@@ -49,9 +55,29 @@ const department = {
       },
     )
       .then((answers) => {
-        departmentAdd(answers);
+        departmentAdd(["name", answers.name]);
         department.view();
       });
+  },
+  // Deletes Department
+  delete: async () => {
+    inquirer.prompt({
+      type: "list",
+      name: "id",
+      pageSize: 10,
+      message: "Which department do you want to remove?",
+      choices: await departmentFind().then((result) => {
+        result.unshift({ value: null, name: "Go Back" });
+        return result;
+      }),
+    }).then((answers) => {
+      if (answers.id === null) {
+        department.menu();
+      } else {
+        rowDelete(["department", "id", answers.id]);
+        department.view();
+      }
+    });
   },
 };
 
