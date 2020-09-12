@@ -1,7 +1,7 @@
 const inquirer = require("inquirer");
 const index = require("../index");
 const {
-  employeeView, employeeAdd, employeeFind, rolesFind, employeeDelete, employeeUpdate,
+  employeeView, employeeAdd, employeeFind, rolesFind, rowUpdate, rowDelete,
 } = require("../config/orm");
 
 const employee = {
@@ -11,6 +11,7 @@ const employee = {
       name: "menu",
       type: "list",
       message: "What would you like to do?",
+      pageSize: 10,
       choices: [
         "View All Employees",
         "View All Employees by Department",
@@ -40,10 +41,10 @@ const employee = {
           employee.delete();
           break;
         case "Update Employee Role":
-          // employeeUpdateRole();
+          employee.updateRole();
           break;
         case "Update Employee Manager":
-          // employeeUpdateManager();
+          employee.updateManager();
           break;
         default:
           index.menu();
@@ -78,6 +79,7 @@ const employee = {
       {
         type: "list",
         name: "role_id",
+        pageSize: 15,
         message: "What is the employee's role?",
         choices: await rolesFind(),
       },
@@ -85,6 +87,7 @@ const employee = {
         type: "list",
         name: "manager_id",
         message: "Who is the employee's manager?",
+        pageSize: 15,
         choices: await employeeFind().then((result) => {
           result.unshift({ value: null, name: "None" });
           return result;
@@ -100,7 +103,8 @@ const employee = {
   delete: async () => {
     inquirer.prompt({
       type: "list",
-      name: "employee",
+      name: "id",
+      pageSize: 15,
       message: "Which employee do you want to terminate?",
       choices: await employeeFind().then((result) => {
         result.unshift({ value: null, name: "Go Back" });
@@ -110,18 +114,19 @@ const employee = {
       if (answers.employee === null) {
         employee.menu();
       } else {
-        employeeDelete(answers.employee);
+        rowDelete(["employee", "id", answers.id]);
         employee.view("All");
       }
     });
   },
 
   // Update employee's role
-  employeeUpdateRole: async () => {
+  updateRole: async () => {
     inquirer.prompt([
       {
         type: "list",
         name: "id",
+        pageSize: 15,
         message: "Who is the employee?",
         choices: await employeeFind().then((result) => {
           result.unshift({ value: null, name: "Go Back" });
@@ -131,6 +136,7 @@ const employee = {
       {
         type: "list",
         name: "role_id",
+        pageSize: 15,
         message: "What is the employee's new role?",
         choices: await rolesFind(),
         when: (answers) => answers.id != null,
@@ -140,18 +146,19 @@ const employee = {
       if (answers.id === null) {
         employee.menu();
       } else {
-        employeeUpdate(["employee", "role_id", answers.role_id, "id", answers.id]);
+        rowUpdate(["employee", "role_id", answers.role_id, "id", answers.id]);
         employee.view("All");
       }
     });
   },
 
   // Update employee's manager
-  employeeUpdateManager: async () => {
+  updateManager: async () => {
     inquirer.prompt([
       {
         type: "list",
         name: "id",
+        pageSize: 15,
         message: "Who is the employee?",
         choices: await employeeFind().then((result) => {
           result.unshift({ value: null, name: "Go Back" });
@@ -161,6 +168,7 @@ const employee = {
       {
         type: "list",
         name: "manager_id",
+        pageSize: 15,
         message: "Who is the employee's manager?",
         choices: await employeeFind().then((result) => {
           result.unshift({ value: null, name: "None" });
@@ -175,7 +183,7 @@ const employee = {
         console.log("Employee cannot be its own manager");
         employee.menu();
       } else {
-        employeeUpdate(["employee", "manager_id", answers.manager_id, "id", answers.id]);
+        rowUpdate(["employee", "manager_id", answers.manager_id, "id", answers.id]);
         employee.view("All");
       }
     });

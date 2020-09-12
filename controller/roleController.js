@@ -1,6 +1,6 @@
 const inquirer = require("inquirer");
 const {
-  rolesView, rolesAdd, departmentFind, employeeFind, employeeDelete,
+  rolesView, rolesAdd, departmentFind, rolesFind, rowDelete, rowUpdate,
 } = require("../config/orm");
 const index = require("../index");
 
@@ -90,72 +90,73 @@ const role = {
   delete: async () => {
     inquirer.prompt({
       type: "list",
-      name: "employee",
-      message: "Which employee do you want to terminate?",
-      choices: await employeeFind().then((result) => {
+      name: "id",
+      message: "Which role do you want to remove?",
+      choices: await rolesFind().then((result) => {
         result.unshift({ value: null, name: "Go Back" });
         return result;
       }),
     }).then((answers) => {
-      if (answers.employee === null) {
+      if (answers.id === null) {
         role.menu();
       } else {
-        employeeDelete(answers.employee);
+        rowDelete(["role", "id", answers.id]);
         role.view("All");
       }
     });
   },
   // Update Role's Title, Salary or Department
   update: async () => {
-    const roleSubMenu = await inquirer.prompt({
-      type: "list",
-      name: "subMenu",
-      message: "Which role do you want to update?",
-      choices: [{ value: null, name: "Go Back" }, { value: "title", name: "Update Title" }, { value: "salary", name: "Update Salary" }, { value: "department", name: "Update Department" }],
-    });
-    if (roleSubMenu.subMenu === null) {
+    const roleUpdate = await inquirer.prompt(
+      {
+        type: "list",
+        name: "id",
+        message: "Which role do you want to update?",
+        pageSize: 15,
+        choices: await rolesFind().then((result) => {
+          result.unshift({ value: null, name: "Go Back" });
+          return result;
+        }),
+      },
+    );
+
+    if (roleUpdate.id === null) {
       role.menu();
+    } else {
+      const column = await inquirer.prompt({
+        type: "list",
+        name: "name",
+        message: "Which do you want to update?",
+        choices: [{ value: "title", name: "Update Title" }, { value: "salary", name: "Update Salary" }, { value: "department", name: "Update Department" }, { value: null, name: "Go Back" }],
+      });
+      if (column.name === null) {
+        role.menu();
+      } else if (column.name === "department") {
+        inquirer.prompt(
+          {
+            type: "list",
+            name: "department",
+            message: "Which role do you want to update?",
+            pageSize: 15,
+            choices: await departmentFind(),
+          },
+        ).then((answers) => {
+          console.log(answers);
+          rowUpdate(["role", "department_id", answers.department, "id", roleUpdate.id]);
+          role.menu();
+        });
+      } else {
+        inquirer.prompt({
+          type: "input",
+          name: "value",
+          message: `What is the new role's ${column.name}`,
+        }).then((answers) => {
+          console.log(answers);
+          rowUpdate(["role", column.name, answers.value, "id", roleUpdate.id]);
+          role.menu();
+        });
+      }
     }
-    await inquirer.prompt({
-
-    });
-    // {
-    //   type: "list",
-    //   name: "roleChoose",
-    //   message: "Which role do you want to update?",
-    //   choices: await orm.rolesFind().then(result => {
-    //     result.unshift({value: null, name: "Go Back"});
-    //     return result;
-    //     }),
-    //   when: function(answers) {
-    //     return answers.rolesUpdateMenu;
-    //   }
-    // },
-    // {
-    //   type: "input",
-    //   name: "roleSet",
-    //   message: `What is the role's newest ${answers.rolesUpdateMenu}?`,
-    //   when: function(answers) {
-    //     return answers.roleChoose;
-    //   }
-    // }
-    // ]).then(answers => {
-    //   console.log(answers)
-    //   if (answers.rolesUpdateMenu === null){
-    //     menu();
-    //   }
-    // })
-
-  // if(answers.rolesUpdate === null){
-  //   menu();
-  // };
-  // inquirer.prompt([{
-    // type: "list",
-    // name: "choice",
-    // message: "Which role do you want to update?",
-    // choices: await orm.rolesFind()
-  // }]).then(answers => {console.log(answers)});
-  // orm.rolesUpdate(["role", ])
   },
 };
 

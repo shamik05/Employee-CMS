@@ -32,25 +32,26 @@ const orm = {
       return false;
     }
   },
-  employeeAdd: async (values) => {
+  employeeAdd: async (answers) => {
     try {
       const query = "INSERT INTO employee(first_name, last_name, role_id, manager_id) values(?,?,?,?)";
-      return await db.query(query, [...Object.values(values)]);
+      return await db.query(query, [...Object.values(answers)]);
     } catch (error) {
       if (error) throw error;
       return false;
     }
   },
-  employeeDelete: async (id) => {
+  rowDelete: async (answers) => {
+    console.log(answers);
     try {
-      const query = "DELETE FROM employee where id = ?";
-      return await db.query(query, id);
+      const query = "DELETE FROM ?? where ?? = ?";
+      return await db.query(query, answers);
     } catch (error) {
       if (error) throw error;
       return false;
     }
   },
-  employeeUpdate: async (answers) => {
+  rowUpdate: async (answers) => {
     try {
       const query = "UPDATE ?? SET ?? = ? WHERE ?? = ?";
       return await db.query(query, answers);
@@ -79,26 +80,6 @@ const orm = {
     try {
       const query = "INSERT INTO role(??, ??, ??) values(?,?,?)";
       return await db.query(query, [...Object.keys(answers), ...Object.values(answers)]);
-    } catch (error) {
-      if (error) throw error;
-      return false;
-    }
-  },
-  rolesDelete: async (answers) => {
-    console.log(answers);
-    try {
-      const query = "";
-      return await db.query();
-    } catch (error) {
-      if (error) throw error;
-      return false;
-    }
-  },
-  rolesUpdate: async (answers) => {
-    console.log(answers);
-    try {
-      const query = "UPDATE ?? SET ?? = ? WHERE ?? = ?";
-    // return await db.query(query, answers);
     } catch (error) {
       if (error) throw error;
       return false;
