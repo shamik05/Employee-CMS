@@ -4,6 +4,7 @@ const cTable = require("console.table");
 const role = require("./controller/roleController.js");
 const employee = require("./controller/employeeController.js");
 const db = require("./config/connection");
+const department = require("./controller/departmentController.js");
 
 // Main menu
 const menu = () => {
@@ -26,6 +27,7 @@ const menu = () => {
       role.menu();
       break;
     case "Department Management":
+      department.menu();
       break;
     default:
       console.log("Exiting");

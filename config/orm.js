@@ -86,9 +86,27 @@ const orm = {
     }
   },
   departmentFind: async () => {
-    const query = "SELECT id AS value, name FROM department ORDER BY name ASC";
     try {
+      const query = "SELECT id AS value, name FROM department ORDER BY name ASC";
       return await db.query(query);
+    } catch (error) {
+      if (error) throw error;
+      return false;
+    }
+  },
+  departmentView: async () => {
+    try {
+      const query = "SELECT id AS Id, name AS Name FROM department ORDER BY name ASC";
+      return await db.query(query);
+    } catch (error) {
+      if (error) throw error;
+      return false;
+    }
+  },
+  departmentAdd: async (answers) => {
+    try {
+      const query = "INSERT INTO department(??) values(?)";
+      return await db.query(query, answers);
     } catch (error) {
       if (error) throw error;
       return false;
