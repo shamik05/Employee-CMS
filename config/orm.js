@@ -96,7 +96,13 @@ const orm = {
   },
   departmentView: async () => {
     try {
-      const query = "SELECT id AS Id, name AS Name FROM department ORDER BY name ASC";
+      const query = `SELECT department.id AS "ID", name AS "Name", ifnull(sum(salary), 0) AS "Budget($)", count(employee.id) AS "Employees" from employee 
+      LEFT JOIN role 
+      ON employee.role_id = role.id
+      RIGHT JOIN department
+      ON department_id = department.id
+      GROUP BY department.name
+      ORDER BY department.id`;
       return await db.query(query);
     } catch (error) {
       if (error) throw error;

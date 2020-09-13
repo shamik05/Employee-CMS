@@ -13,7 +13,6 @@ const department = {
       message: "What would you like to do?",
       choices: [
         "View Departments",
-        "View Department Details",
         "Add Department",
         "Remove Department",
         "Go Back",
@@ -21,9 +20,6 @@ const department = {
     }).then((answers) => {
       switch (answers.menu) {
       case "View Departments":
-        department.view();
-        break;
-      case "View Department Details":
         department.view();
         break;
       case "Add Department":
@@ -42,12 +38,12 @@ const department = {
   view: async () => {
     await departmentView().then((result) => {
       console.table(result);
+      department.menu();
     });
-    department.menu();
   },
   // Add Department
   add: async () => {
-    inquirer.prompt(
+    await inquirer.prompt(
       {
         name: "name",
         message: "What is the department name?",
@@ -61,7 +57,7 @@ const department = {
   },
   // Deletes Department
   delete: async () => {
-    inquirer.prompt({
+    await inquirer.prompt({
       type: "list",
       name: "id",
       pageSize: 10,
@@ -71,9 +67,7 @@ const department = {
         return result;
       }),
     }).then((answers) => {
-      if (answers.id === null) {
-        department.menu();
-      } else {
+      if (answers.id != null) {
         rowDelete(["department", "id", answers.id]);
         department.view();
       }
