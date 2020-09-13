@@ -5,7 +5,7 @@ const orm = {
     let order;
     switch (type) {
     case "Department":
-      order = "D.name";
+      order = "D.name desc";
       break;
     case "Manager":
       order = "Manager desc";
@@ -14,7 +14,7 @@ const orm = {
       order = "E.id";
       break;
     }
-    const query = `SELECT E.id AS ID, E.first_name AS "First Name", E.last_name AS "Last Name", R.title AS "Role", D.name AS "Department", R.salary AS "Salary ($)", concat(M.first_name, " ", M.last_name) AS "Manager" 
+    const query = `SELECT E.id AS ID, E.first_name AS "First Name", E.last_name AS "Last Name", R.title AS "Role", D.name AS "Department", R.salary AS "Salary ($)", IFNULL(concat(M.first_name, " ", M.last_name),"None") AS "Manager" 
     FROM employee AS E 
     INNER JOIN role AS R ON E.role_id = R.id 
     INNER JOIN department AS D ON R.department_id = D.id
@@ -112,6 +112,34 @@ const orm = {
   departmentAdd: async (answers) => {
     try {
       const query = "INSERT INTO department(??) values(?)";
+      return await db.query(query, answers);
+    } catch (error) {
+      if (error) throw error;
+      return false;
+    }
+  },
+  departmentViewRoles: async (answers) => {
+    try {
+      const query = `SELECT department.id as "ID", name as "Name", title as "Role Title", salary as "Salary"  
+      FROM department
+      RIGHT JOIN role
+      ON department.id = role.department_id
+      WHERE department.id = ?`;
+      return await db.query(query, answers);
+    } catch (error) {
+      if (error) throw error;
+      return false;
+    }
+  },
+  departmentViewEmployees: async (answers) => {
+    try {
+      const query = `SELECT employee.id AS "ID", concat(first_name, " ", last_name) AS "Name", title AS "Title" FROM employee 
+      LEFT JOIN role
+      ON employee.role_id = role.id
+      LEFT JOIN department
+      ON role.department_id = department.id
+      WHERE department.id = ?
+      ORDER BY employee.id`;
       return await db.query(query, answers);
     } catch (error) {
       if (error) throw error;

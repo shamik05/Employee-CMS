@@ -57,8 +57,8 @@ const employee = {
   view: (type) => {
     employeeView(type, (err, result) => {
       if (err) throw err;
+      console.log("\n");
       console.table(result);
-      // console.log(result);
     });
     employee.menu();
   },
