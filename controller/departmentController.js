@@ -64,13 +64,15 @@ const department = {
     }).then((answers) => {
       if (answers.id != null) {
         departmentViewRoles([answers.id]).then((result) => {
-          if (!result) {
+          if (result.length) {
             console.table(result);
           } else {
             console.log("No roles found!");
           }
-          department.menu();
+          department.viewRoles();
         });
+      } else {
+        department.menu();
       }
     });
   },
@@ -88,13 +90,15 @@ const department = {
     }).then((answers) => {
       if (answers.id != null) {
         departmentViewEmployees([answers.id]).then((result) => {
-          if (!result) {
+          if (result.length) {
             console.table(result);
           } else {
             console.log("No employees found!");
           }
-          department.menu();
+          department.viewEmployees();
         });
+      } else {
+        department.menu();
       }
     });
   },
@@ -106,11 +110,10 @@ const department = {
         message: "What is the department name?",
         validate: (input) => input !== "" || "Title cannot be empty.",
       },
-    )
-      .then((answers) => {
-        departmentAdd(["name", answers.name]);
-        department.view();
-      });
+    ).then((answers) => {
+      departmentAdd(["name", answers.name]);
+      department.view();
+    });
   },
   // Deletes Department
   delete: async () => {
@@ -124,9 +127,11 @@ const department = {
         return result;
       }),
     }).then((answers) => {
-      if (answers.id != null) {
+      if (answers) {
         rowDelete(["department", "id", answers.id]);
         department.view();
+      } else {
+        department.menu();
       }
     });
   },

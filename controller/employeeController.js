@@ -54,9 +54,8 @@ const employee = {
   },
 
   // View employees with view (ALL, BY DEPARTMENT, BY MANAGER) passed in as argument
-  view: (type) => {
-    employeeView(type, (err, result) => {
-      if (err) throw err;
+  view: async (type) => {
+    employeeView(type).then((result) => {
       console.log("\n");
       console.table(result);
     });

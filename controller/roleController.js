@@ -12,7 +12,10 @@ const role = {
       type: "list",
       message: "What would you like to do?",
       choices: [
-        "View Roles",
+        "View Roles by ID",
+        "View Roles by Title",
+        "View Roles by Salary",
+        "View Roles by Department",
         "Add Role",
         "Remove Role",
         "Update Role",
@@ -21,8 +24,17 @@ const role = {
     })
       .then((answers) => {
         switch (answers.menu) {
-        case "View Roles":
-          role.view();
+        case "View Roles by ID":
+          role.view("role.id");
+          break;
+        case "View Roles by Title":
+          role.view("title");
+          break;
+        case "View Roles by Salary":
+          role.view("salary");
+          break;
+        case "View Roles by Department":
+          role.view("department");
           break;
         case "Add Role":
           role.add();
@@ -41,9 +53,8 @@ const role = {
       });
   },
   // View all roles
-  view: async () => {
-    rolesView((err, result) => {
-      if (err) throw err;
+  view: async (type) => {
+    rolesView(type).then((result) => {
       console.log("\n\n");
       console.table(result);
     });
@@ -79,11 +90,10 @@ const role = {
         message: "What is the employee's role?",
         choices: await departmentFind(),
       },
-    ])
-      .then((answers) => {
-        rolesAdd(answers);
-        role.view();
-      });
+    ]).then((answers) => {
+      rolesAdd(answers);
+      role.view("role.id");
+    });
   },
 
   // Deletes role
@@ -101,7 +111,7 @@ const role = {
         role.menu();
       } else {
         rowDelete(["role", "id", answers.id]);
-        role.view("All");
+        role.view("role.id");
       }
     });
   },
@@ -130,7 +140,7 @@ const role = {
         choices: [{ value: "title", name: "Update Title" }, { value: "salary", name: "Update Salary" }, { value: "department", name: "Update Department" }, { value: null, name: "Go Back" }],
       });
       if (column.name === null) {
-        role.menu();
+        role.update();
       } else if (column.name === "department") {
         inquirer.prompt(
           {
@@ -141,9 +151,8 @@ const role = {
             choices: await departmentFind(),
           },
         ).then((answers) => {
-          console.log(answers);
           rowUpdate(["role", "department_id", answers.department, "id", roleUpdate.id]);
-          role.menu();
+          role.view("role.id");
         });
       } else {
         inquirer.prompt({
@@ -151,9 +160,8 @@ const role = {
           name: "value",
           message: `What is the new role's ${column.name}`,
         }).then((answers) => {
-          console.log(answers);
           rowUpdate(["role", column.name, answers.value, "id", roleUpdate.id]);
-          role.menu();
+          role.view("role.id");
         });
       }
     }
