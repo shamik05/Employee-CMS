@@ -1,3 +1,4 @@
+// Import dependencies
 const inquirer = require("inquirer");
 // eslint-disable-next-line no-unused-vars
 const cTable = require("console.table");
@@ -9,6 +10,7 @@ const department = require("./controller/departmentController.js");
 
 // Main menu
 const menu = async () => {
+  // Inquirer prompt presenting three options
   inquirer.prompt({
     name: "menu",
     type: "list",
@@ -20,6 +22,7 @@ const menu = async () => {
       "Exit",
     ],
   }).then((answer) => {
+    // Depending on answer, direct user to appropriate controller
     switch (answer.menu) {
     case "Employee Management":
       employee.menu();
@@ -38,14 +41,18 @@ const menu = async () => {
   });
 };
 
+// Banner shown on program start that is automatically ran
 figlet("Employee Tracker", async (err, data) => {
   if (err) {
     console.log("Something went wrong...");
     console.dir(err);
     return;
   }
+  // Show the banner on the console
   console.log(data);
+  // Run the main menu
   await menu();
 });
 
+// Exports the main menu function
 module.exports.menu = menu;
