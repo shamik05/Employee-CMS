@@ -15,10 +15,10 @@ const orm = {
         order = "E.id";
         break;
       }
-      const query = `SELECT E.id AS ID, E.first_name AS "First Name", E.last_name AS "Last Name", R.title AS "Role", D.name AS "Department", R.salary AS "Salary ($)", IFNULL(concat(M.first_name, " ", M.last_name),"None") AS "Manager" 
+      const query = `SELECT E.id AS ID, E.first_name AS "First Name", E.last_name AS "Last Name", IFNULL(R.title, "Unassigned") AS "Role", IFNULL(D.name, "Unassigned") AS "Department", IFNULL(R.salary, "Unassigned") AS "Salary ($)", IFNULL(concat(M.first_name, " ", M.last_name),"Unassigned") AS "Manager" 
       FROM employee AS E 
-      INNER JOIN role AS R ON E.role_id = R.id 
-      INNER JOIN department AS D ON R.department_id = D.id
+      LEFT JOIN role AS R ON E.role_id = R.id 
+      LEFT JOIN department AS D ON R.department_id = D.id
       LEFT JOIN employee AS M ON E.manager_id = M.id
       ORDER BY ${order}`;
       return await db.query(query);
@@ -75,7 +75,7 @@ const orm = {
   },
   rolesView: async (type) => {
     try {
-      const query = `SELECT role.id AS "ID", title AS "Title", salary AS "Salary ($)", department.name AS "Department" FROM role 
+      const query = `SELECT role.id AS "ID", title AS "Title", salary AS "Salary ($)", IFNULL(department.name, "Unassigned") AS "Department" FROM role 
     LEFT JOIN department 
     ON role.department_id = department.id
     ORDER BY ?? asc`;

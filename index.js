@@ -31,7 +31,7 @@ const menu = async () => {
       department.menu();
       break;
     default:
-      console.log("Exiting");
+      console.log("Goodbye");
       db.close();
       break;
     }
