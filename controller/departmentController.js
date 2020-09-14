@@ -3,7 +3,7 @@ const inquirer = require("inquirer");
 const index = require("../index");
 const {
   // eslint-disable-next-line max-len
-  departmentFind, departmentView, departmentAdd, rowDelete, departmentViewRoles, departmentViewEmployees,
+  departmentFind, departmentView, departmentAdd, rowDelete, departmentViewRoles, departmentViewEmployees, rowUpdate,
 } = require("../config/orm");
 
 // All functions related to department submenu
@@ -20,6 +20,7 @@ const department = {
         "View Department's employees",
         "Add Department",
         "Remove Department",
+        "Update Department Name",
         "Go Back",
       ],
     }).then((answers) => {
@@ -39,6 +40,9 @@ const department = {
         break;
       case "Remove Department":
         department.delete();
+        break;
+      case "Update Department Name":
+        department.updateName();
         break;
       default:
         // Returns to main menu
@@ -170,6 +174,43 @@ const department = {
         department.view();
       } else {
         // A department wasn't chosen so return to department management menu
+        department.menu();
+      }
+    });
+  },
+
+  // Updates Department's Name
+  updateName: async () => {
+    // Asks which department to update
+    await inquirer.prompt([{
+      type: "list",
+      name: "id",
+      pageSize: 10,
+      message: "Which department do you want to update?",
+      // Lists all departments to choose from
+      choices: await departmentFind().then((result) => {
+        // Inserts a return option to department menu at index 0
+        result.unshift({ value: null, name: "Go Back" });
+        return result;
+      }),
+    },
+    // Asks what the department's new name is
+    {
+      type: "input",
+      name: "value",
+      // Ask for the department's new name
+      message: "What is the department's new name?",
+      when: (answers) => answers.id != null,
+    },
+    ]).then((answers) => {
+      // If a department is chosen, call the orm function and pass department id as argument
+      if (answers.value) {
+        // Update the department row with the new name
+        rowUpdate(["department", "name", answers.value, "id", answers.id]);
+        // Shows the updated departments
+        department.view();
+      } else {
+        // If a department wasn't chosen then return to department menu
         department.menu();
       }
     });
