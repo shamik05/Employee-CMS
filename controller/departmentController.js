@@ -10,10 +10,11 @@ const {
 const department = {
   // Department Management Menu
   menu: async () => {
-    inquirer.prompt({
+    await inquirer.prompt({
       name: "menu",
       type: "list",
       message: "What would you like to do?",
+      pageSize: 10,
       choices: [
         "View Departments",
         "View Department's roles",
@@ -56,7 +57,7 @@ const department = {
   view: async () => {
     await departmentView().then((result) => {
       // Displays results as columns
-      console.table(result);
+      result.length ? console.table(result) : console.log("No departments found");
       // Displays department management menu
       department.menu();
     });
@@ -80,15 +81,8 @@ const department = {
       // If a department is chosen, call the orm function and pass inquirer answers as argument
       if (answers.id != null) {
         departmentViewRoles([answers.id]).then((result) => {
-          // If a department has any roles associated with it, display the result
-          if (result.length) {
-            // Displays results as columns
-            console.table(result);
-          } else {
-            // No results to display
-            console.log("No roles found!");
-          }
-          // Shows the department roles menu
+          // If a department has any roles associated with it, display the result and return to menu
+          result.length ? console.table(result) : console.log("No roles found!");
           department.viewRoles();
         });
       } else {
@@ -105,7 +99,7 @@ const department = {
       type: "list",
       name: "id",
       pageSize: 10,
-      message: "Which department's roles do you want to view?",
+      message: "Which department's employees do you want to view?",
       // Lists all departments to choose from
       choices: await departmentFind().then((result) => {
         // Inserts a return option to department menu at index 0
@@ -117,18 +111,11 @@ const department = {
       if (answers.id != null) {
         departmentViewEmployees([answers.id]).then((result) => {
           // If a department has any employees associated with it, display the result
-          if (result.length) {
-            // Displays results as columns
-            console.table(result);
-          } else {
-            // No results to display
-            console.log("No employees found!");
-          }
-          // Shows the department employees menu
+          result.length ? console.table(result) : console.log("No employees found!");
           department.viewEmployees();
         });
       } else {
-        // A department wasnt chosen so return to department management menu
+        // A department wasn't chosen so return to department management menu
         department.menu();
       }
     });

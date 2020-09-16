@@ -9,10 +9,11 @@ const index = require("../index");
 const role = {
   // Role Management Menu
   menu: async () => {
-    inquirer.prompt({
+    await inquirer.prompt({
       name: "menu",
       type: "list",
       message: "What would you like to do?",
+      pageSize: 10,
       choices: [
         "View Roles by ID",
         "View Roles by Title",
@@ -43,7 +44,6 @@ const role = {
         break;
       case "Remove Role":
         role.delete();
-        console.log(answers.menu);
         break;
       case "Update Role":
         role.update();
@@ -60,8 +60,7 @@ const role = {
   view: async (type) => {
     await rolesView(type).then((result) => {
       // Displays results as columns
-      console.log("\n\n");
-      console.table(result);
+      result.length ? console.table(result) : console.log("No roles found!");
     });
     // Displays role management menu
     role.menu();
@@ -102,7 +101,11 @@ const role = {
         type: "list",
         name: "department_id",
         message: "Which department does the role belong to?",
-        choices: await departmentFind(),
+        choices: await departmentFind().then((result) => {
+          // Inserts a return option to role menu at index 0
+          result.unshift({ value: null, name: "None" });
+          return result;
+        }),
       },
     ]).then((answers) => {
       // Add row to role table
@@ -173,14 +176,18 @@ const role = {
         // If the department column is chosen
       } else if (column.name === "department") {
         // Asks which department to update to
-        inquirer.prompt(
+        await inquirer.prompt(
           {
             type: "list",
             name: "department",
-            message: "Which role do you want to update?",
+            message: "What is the role's new department?",
             pageSize: 15,
             // Lists all departments
-            choices: await departmentFind(),
+            choices: await departmentFind().then((result) => {
+              // Inserts a return option to role menu at index 0
+              result.unshift({ value: null, name: "None" });
+              return result;
+            }),
           },
         ).then((answers) => {
           // Update the role row with the new department id
@@ -190,7 +197,7 @@ const role = {
         });
       } else {
         // If the title or salary column is chosen
-        inquirer.prompt({
+        await inquirer.prompt({
           type: "input",
           name: "value",
           // Ask for the new column value

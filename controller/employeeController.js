@@ -9,7 +9,7 @@ const {
 const employee = {
 // Employee Management Menu
   menu: async () => {
-    inquirer.prompt({
+    await inquirer.prompt({
       name: "menu",
       type: "list",
       message: "What would you like to do?",
@@ -58,10 +58,9 @@ const employee = {
 
   // View employees with view (ALL, BY DEPARTMENT, BY MANAGER) passed in as argument
   view: async (type) => {
-    employeeView(type).then((result) => {
-      console.log("\n");
+    await employeeView(type).then((result) => {
       // Displays results as columns
-      console.table(result);
+      result.length ? console.table(result) : console.log("No records found!");
     });
     // Displays employee management menu
     employee.menu();
@@ -69,7 +68,7 @@ const employee = {
 
   // Adds employee
   add: async () => {
-    inquirer.prompt([
+    await inquirer.prompt([
       // Ask employee's first name
       {
         name: "first_name",
@@ -91,7 +90,11 @@ const employee = {
         pageSize: 15,
         message: "What is the employee's role?",
         // Lists all roles to choose from
-        choices: await rolesFind(),
+        choices: await rolesFind().then((result) => {
+          // Inserts a return option to role menu at index 0
+          result.unshift({ value: null, name: "None" });
+          return result;
+        }),
       },
       // Ask if the employee has a manager
       {
@@ -143,7 +146,7 @@ const employee = {
   // Update employee's role
   updateRole: async () => {
     // Asks which employee to update
-    inquirer.prompt([
+    await inquirer.prompt([
       {
         type: "list",
         name: "id",
@@ -163,7 +166,11 @@ const employee = {
         pageSize: 15,
         message: "What is the employee's new role?",
         // Lists all roles to choose from
-        choices: await rolesFind(),
+        choices: await rolesFind().then((result) => {
+          // Inserts a return option to role menu at index 0
+          result.unshift({ value: null, name: "Go Back" });
+          return result;
+        }),
         when: (answers) => answers.id != null,
       },
     ]).then((answers) => {
@@ -182,7 +189,7 @@ const employee = {
   // Update employee's manager
   updateManager: async () => {
     // Asks which employee to update
-    inquirer.prompt([
+    await inquirer.prompt([
       {
         type: "list",
         name: "id",
