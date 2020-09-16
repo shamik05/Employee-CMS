@@ -7,11 +7,12 @@ const role = require("./controller/roleController.js");
 const employee = require("./controller/employeeController.js");
 const db = require("./config/connection");
 const department = require("./controller/departmentController.js");
+const statistics = require("./controller/statisticsController.js");
 
 // Main menu
 const menu = async () => {
   // Inquirer prompt presenting three options
-  inquirer.prompt({
+  await inquirer.prompt({
     name: "menu",
     type: "list",
     message: "What would you like to do?",
@@ -19,6 +20,7 @@ const menu = async () => {
       "Employee Management",
       "Role Management",
       "Department Management",
+      "Statistics",
       "Exit",
     ],
   }).then((answer) => {
@@ -32,6 +34,9 @@ const menu = async () => {
       break;
     case "Department Management":
       department.menu();
+      break;
+    case "Statistics":
+      statistics.count();
       break;
     default:
       console.log("Goodbye");
@@ -50,6 +55,7 @@ figlet("Employee Tracker", async (err, data) => {
   }
   // Show the banner on the console
   console.log(data);
+  console.log("\n");
   // Run the main menu
   await menu();
 });

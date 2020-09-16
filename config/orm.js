@@ -225,6 +225,19 @@ const orm = {
       return false;
     }
   },
+
+  // Shows count of ids for each table
+  showCount: async () => {
+    try {
+      const query = `select count(id) as "count" from employee union
+      select count(id) from role union
+      select count(id) from department`;
+      return await db.query(query);
+    } catch (error) {
+      if (error) throw error;
+      return false;
+    }
+  },
 };
 
 // Exports all orm functions
