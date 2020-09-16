@@ -8,8 +8,17 @@ This is a **C**ontent **M**anagement **S**ystems focused-application for managin
 * [Usage](#Usage)
   * [Main](#Main)
   * [Employees](#Employees)
+    * [View](#View)
+    * [Add/Remove](#Add/Remove)
+    * [Update](#Update)
   * [Roles](#Roles)
+    * [View](#View)
+    * [Add/Remove](#Add/Remove)
+    * [Update](#Update)
   * [Departments](#Departments)
+    * [View](#View)
+    * [Add/Remove](#Add/Remove)
+    * [Update](#Update)
 * [License](#License)
 * [Contributing](#Contributing)
 * [Tests](#Tests)
@@ -28,18 +37,30 @@ Type the following in any CLI to run the app.
 ```
 node index.js
 ```
-GIFs have also been attached for demo purposes.
+Each module's functions have also been demo-ed below.
 ### Main
-![Main](main.gif)
-(<iframe src="https://drive.google.com/file/d/1mpFmP9KwG6y6r_qV5lKtpzn6XAmsXwlg/preview" width="640" height="480"></iframe>)
+![Main](assets/main.gif)
 ### Employees
-![Employees](employee.gif)
-
+#### View
+![View](assets/employee-view.gif)
+#### Add/Delete
+![Add/Delete](assets/employee-add-del.gif)
+#### Update
+![Update](assets/employee-update.gif)
 ### Roles
-![Roles](roles.gif)
-
+#### View
+![View](assets/role-view.gif)
+#### Add/Delete
+![Add/Delete](assets/role-add-del.gif)
+#### Update
+![Update](assets/role-update.gif)
 ### Departments
-![Departments](department.gif)
+#### View
+![View](assets/department-view.gif)
+#### Add/Delete
+![Add/Delete](assets/department-add-del.gif)
+#### Update
+![Update](assets/department-update.gif)
 ## License 
 The project is currently licenseless.
 ## Contributing
