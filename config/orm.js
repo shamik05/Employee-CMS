@@ -229,6 +229,7 @@ const orm = {
   // Shows count of ids for each table
   showCount: async () => {
     try {
+      // Returns count of ids for each table
       const query = `select count(id) as "count" from employee union
       select count(id) from role union
       select count(id) from department`;

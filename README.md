@@ -1,31 +1,45 @@
 # Employee Tracker
 ![GitHub License](https://img.shields.io/badge/License-None-blue)
 ## Description
-This is a browser-based note taking application that let's you organize your thoughts. Users have the freedom to write, save and delete their notes. The front end consists of html,css and javascript. The backend utilizes node and the express framework to handle routing and any requests/responses. The notes are saved as json within the directory and are uniquely identified using the UID framework. The application is hosted on Heroku and can be found [here]().
+This is a **C**ontent **M**anagement **S**ystems focused-application for managing a company's employee database. It's built with a node interface and uses the inquirer npm package to communicate to a mysql backend. The results are then displayed using the console.table npm package. It has three major components (tables) in the database - Employees, Roles and Departments. Each management table consists of its own views, adding, removing and updating functions which the user has complete control over. The schema files in the sql folder can be consulted to find a detailed database structure. 
 ## Table of Contents
 * [Installation](#Installation)
+* [Configuration](#Configuration)
 * [Usage](#Usage)
-    * [Demo](#Demo)
+  * [Main](#Main)
+  * [Employees](#Employees)
+  * [Roles](#Roles)
+  * [Departments](#Departments)
 * [License](#License)
 * [Contributing](#Contributing)
 * [Tests](#Tests)
 * [Questions](#Questions)
 ## Installation
-To install necessary dependencies, run the following command:
+Download or clone the repo to a working director and extract its contents. Use a **C**ommand **L**ine **I**nterface to install necessary dependencies by running the following command:
 ```
 npm i
 ```
-To create the database, copy the contents from ![schema](assets/schema.sql) and run it an application like MySQL Workbench
+To create the database, copy the contents from ![schema](sql/schema.sql) and run it any application capable of managing MySQL database. MySQL Workbench was used for the development process. 
+Sample data has also been provided in the ![sql](sql/) in the form of .csv files for populating your database and demo the app.
+## Configuration
+Locate the connection.js file inside the config folder and change the create connection function with your appropriate parameters.
 ## Usage 
-Download or clone the repo to a working directory. Extract its contents and run 
+Type the following in any CLI to run the app. 
 ```
 node index.js
 ```
-in any command line interface. 
+GIFs have also been attached for demo purposes.
+### Main
+![Main](main.gif)
+(<iframe src="https://drive.google.com/file/d/1mpFmP9KwG6y6r_qV5lKtpzn6XAmsXwlg/preview" width="640" height="480"></iframe>)
+### Employees
+![Employees](employee.gif)
 
-### Demo
-![Demo](demo.gif)
+### Roles
+![Roles](roles.gif)
 
+### Departments
+![Departments](department.gif)
 ## License 
 The project is currently licenseless.
 ## Contributing
