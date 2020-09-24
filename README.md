@@ -39,28 +39,28 @@ node index.js
 ```
 Each module's functions have also been demo-ed below.
 ### Main
-![Main](assets/main.gif)
+![Main](Assets/main.gif)
 ### Employees
 #### View
-![View](assets/employee-view.gif)
+![View](Assets/employee-view.gif)
 #### Add/Delete
-![Add/Delete](assets/employee-add-del.gif)
+![Add/Delete](Assets/employee-add-del.gif)
 #### Update
-![Update](assets/employee-update.gif)
+![Update](Assets/employee-update.gif)
 ### Roles
 #### View
-![View](assets/role-view.gif)
+![View](Assets/role-view.gif)
 #### Add/Delete
-![Add/Delete](assets/role-add-del.gif)
+![Add/Delete](Assets/role-add-del.gif)
 #### Update
-![Update](assets/role-update.gif)
+![Update](Assets/role-update.gif)
 ### Departments
 #### View
-![View](assets/department-view.gif)
+![View](Assets/department-view.gif)
 #### Add/Delete
-![Add/Delete](assets/department-add-del.gif)
+![Add/Delete](Assets/department-add-del.gif)
 #### Update
-![Update](assets/department-update.gif)
+![Update](Assets/department-update.gif)
 ## License 
 The project is currently licenseless.
 ## Contributing
