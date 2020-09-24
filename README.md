@@ -39,7 +39,7 @@ node index.js
 ```
 Each module's functions have also been demo-ed below.
 ### Main
-![Main](assets/main.gif)
+![Main](Assets/main.gif)
 ### Employees
 #### View
 ![View](assets/employee-view.gif)
