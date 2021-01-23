@@ -1,5 +1,5 @@
 # Employee Tracker
-![GitHub License](https://img.shields.io/badge/License-None-blue)
+[![GitHub License](https://img.shields.io/github/license/shamik05/Employee-Database-CMS)](https://opensource.org/licenses/MIT)
 ## Description
 This is a **C**ontent **M**anagement **S**ystems focused-application for managing a company's employee database. It's built with a node interface and uses the inquirer npm package to communicate to a mysql backend. The results are then displayed using the console.table npm package. It has three major components (tables) in the database - Employees, Roles and Departments. Each management table consists of its own views, adding, removing and updating functions which the user has complete control over. The schema files in the sql folder can be consulted to find a detailed database structure. 
 ## Table of Contents
@@ -62,8 +62,8 @@ Each module's functions have also been demo-ed below.
 #### Update
 ![Update](Assets/department-update.gif)
 ## License 
-The project is currently licenseless.
+This project is licensed under the MIT License - see the [LICENSE.md](/LICENSE.md) file for details
 ## Contributing
-Message the owner on github or by email.
+Message the owner on github or by email. See [CONTRIBUTING.md](/Contributing.md)
 ## Questions 
 If you have any questions about the repo, open an issue or contact me directly at shamik05@hotmail.com. You can find more of my work at [shamik05](https://github.com/shamik05/).
