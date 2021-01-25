@@ -1,16 +1,11 @@
 {
-  "name": "12-MySQL-Employee-Tracker",
+  "name": "Employee-Database-CMS",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-<<<<<<< HEAD
     "test": "npm run lint",
     "start": "node server.js",
-=======
-    "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
->>>>>>> 0ae67faa4891a0ded79dbf9e67ccd8a0f2f2b354
     "lint": "eslint --quiet .",
     "fix": "eslint --fix ."
   },
