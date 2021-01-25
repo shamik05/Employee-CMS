@@ -11,15 +11,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/shamik05/Employee-Database-CMS.git"
+    "url": "git+https://github.com/shamik05/Employee-CMS.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/shamik05/Employee-Database-CMS/issues"
+    "url": "https://github.com/shamik05/Employee-CMS/issues"
   },
-  "homepage": "https://github.com/shamik05/Employee-Database-CMS/blob/master/README.md",
+  "homepage": "https://github.com/shamik05/Employee-CMS/blob/master/README.md",
   "dependencies": {
     "console.table": "^0.10.0",
     "figlet": "^1.5.0",
