@@ -1,6 +1,7 @@
 // Import dependencies
 const mysql = require("mysql");
 const util = require("util");
+require("dotenv").config();
 
 // Courtesy of Michał Męciński from https://codeburst.io/node-js-mysql-and-async-await-6fb25b01b628
 // Uses the util module to promisify the mysql module to handle asynchronous behaviour
@@ -8,11 +9,11 @@ const util = require("util");
 function makeDb() {
   // Database details to create mysql connection
   const connection = mysql.createConnection({
-    host: "localhost",
-    port: 3306,
-    user: "root",
-    password: "&_Q32y^HuOwp",
-    database: "employeesDB",
+    host: process.env.DB_HOST || "localhost",
+    port: process.env.DB_PORT || 3306,
+    user: process.env.DB_USER || "root",
+    password: process.env.DB_PASSWORD || "password",
+    database: process.env.DB_NAME || "database",
   });
 
   // Promisifies the query function and returns it
