@@ -35,7 +35,7 @@ Locate the connection.js file inside the config folder and change the create con
 ## Usage 
 Type the following in any CLI to run the app. 
 ```
-node index.js
+node server.js
 ```
 Each module's functions have also been demo-ed below.
 ### Main
