@@ -1,0 +1,16 @@
+# .replit configuration for Node.js CLI
+run = "npm start"
+language = "nodejs"
+
+# Optional: Configure the console/terminal
+[env]
+TERM = "xterm-256color"
+
+# Optional: Enable the "Run" button to always start the app
+[features]
+packageSearch = false
+packageInstall = false
+
+# Optional: Set the default file to open in editor
+[git]
+open = "server.js"
