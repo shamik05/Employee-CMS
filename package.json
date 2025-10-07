@@ -2,7 +2,7 @@
   "name": "Employee-Database-CMS",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "npm run lint",
     "start": "node server.js",
