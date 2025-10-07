@@ -1,6 +1,6 @@
 // Import dependencies
 const inquirer = require("inquirer");
-const index = require("../index");
+const index = require("../server");
 const {
   employeeView, employeeAdd, employeeFind, rolesFind, rowUpdate, rowDelete,
 } = require("../config/orm");

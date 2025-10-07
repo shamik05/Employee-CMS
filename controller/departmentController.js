@@ -1,6 +1,6 @@
 // Import dependencies
 const inquirer = require("inquirer");
-const index = require("../index");
+const index = require("../server");
 const {
   // eslint-disable-next-line max-len
   departmentFind, departmentView, departmentAdd, rowDelete, departmentViewRoles, departmentViewEmployees, rowUpdate,

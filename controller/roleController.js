@@ -3,7 +3,7 @@ const inquirer = require("inquirer");
 const {
   rolesView, rolesAdd, departmentFind, rolesFind, rowDelete, rowUpdate,
 } = require("../config/orm");
-const index = require("../index");
+const index = require("../server");
 
 // All functions related to role submenu
 const role = {

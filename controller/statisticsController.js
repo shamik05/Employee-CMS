@@ -1,6 +1,6 @@
 // Import dependencies
 const { showCount } = require("../config/orm");
-const index = require("../index");
+const index = require("../server");
 
 // Functions related to statistics submenu
 const statistics = {

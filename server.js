@@ -5,7 +5,7 @@ const cTable = require("console.table");
 const figlet = require("figlet");
 const role = require("./controller/roleController.js");
 const employee = require("./controller/employeeController.js");
-const db = require("./config/connection");
+const db = require("./config/connection.js");
 const department = require("./controller/departmentController.js");
 const statistics = require("./controller/statisticsController.js");
 
